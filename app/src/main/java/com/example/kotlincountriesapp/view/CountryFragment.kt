@@ -5,10 +5,15 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProviders
 import com.example.kotlincountriesapp.R
+import com.example.kotlincountriesapp.viewmodel.CountryViewModel
+import kotlinx.android.synthetic.main.fragment_country.*
 
 class CountryFragment : Fragment() {
-
+    private lateinit var viewModel: CountryViewModel
     private var countryUuid = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,9 +32,31 @@ class CountryFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        initViewModel()
+        observeLiveData()
+
         arguments?.let {
             countryUuid = CountryFragmentArgs.fromBundle(it).countryUuid
 
         }
     }
+    private fun initViewModel() {
+        viewModel = ViewModelProviders.of(this).get(CountryViewModel::class.java)
+        viewModel.getDataFromRoom()
+
+    }
+    private fun observeLiveData() {
+        viewModel.countryLiveData.observe(viewLifecycleOwner, Observer { country->
+            country?.let {
+                countryName.text = country.countryName
+                countryCapital.text = country.countryCapital
+                countryCurrency.text = country.countryCurrency
+                countryRegion.text = country.countryRegion
+                countryLanguage.text = country.countryLanguage
+            }
+        })
+    }
+
+
 }

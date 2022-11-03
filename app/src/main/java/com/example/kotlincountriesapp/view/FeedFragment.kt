@@ -39,19 +39,17 @@ class FeedFragment : Fragment() {
         setRecyclerView(view)
         observeLiveData()
 
-
-
     }
     private fun initViewModel(){
         viewModel = ViewModelProviders.of(this).get(FeedViewModel::class.java)
         viewModel.refreshData()
     }
-    fun setRecyclerView(view: View) {
+    private fun setRecyclerView(view: View) {
         countryList.layoutManager = LinearLayoutManager(context)
         countryList.adapter = countryAdapter
 
     }
-    fun observeLiveData() {
+    private fun observeLiveData() {
         viewModel.countries.observe(viewLifecycleOwner, Observer { countries ->
             countries?.let {
                 //countries boş değilse recycler viewi gösterip (countries) countryError ve Loadingi göstermeyiz!
