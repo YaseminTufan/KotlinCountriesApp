@@ -30,7 +30,7 @@ abstract class CountryDatabase : RoomDatabase() {
                 instance = it
             }
         }
-        private fun makeDatabase(context: Context) = Room.databaseBuilder(context.applicationContext,CountryDatabase::class.java,"countryDatabase").build()
+        private fun makeDatabase(context: Context) = Room.databaseBuilder(context.applicationContext,CountryDatabase::class.java,"countrydatabase").build()
 
     }
 }
