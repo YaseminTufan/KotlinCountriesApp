@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.kotlincountriesapp.model.Country
 import com.example.kotlincountriesapp.service.CountryAPIService
+import com.example.kotlincountriesapp.service.CountryDatabase
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.observers.DisposableSingleObserver
@@ -57,9 +58,15 @@ class FeedViewModel(application: Application) : BaseViewModel(application) {
     //coroutine kullanıcaz ve hangi threadde kullanıcaz vs.belirtmemiz lazım bunun için BaseViewModel oluşturuyoruz ve extend ediyoruz viewmodellarımıza.
     private fun storeInSQLite (list : List<Country>) {
         launch {
-
+            val dao = CountryDatabase(getApplication()).countryDao()
+            dao.deleteAllCountries()
+            val listLong = dao.insertAll(*list.toTypedArray()) //->list ->individual (typedArray yapıp tek tek ekledik.)
+            var i = 0
+            while(i<list.size) {
+                list[i].uuid = listLong[i].toInt()
+                i = i + 1 // kaç adet eleman varsa onu döndürüp uuid olarak tanımladık..
+            }
+            showCountries(list)
         }
-
     }
-
 }
