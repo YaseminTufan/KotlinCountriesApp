@@ -92,4 +92,9 @@ class FeedViewModel(application: Application) : BaseViewModel(application) {
         }
         customPreferences.saveTime(System.nanoTime())
     }
+
+    override fun onCleared() {
+        super.onCleared()
+        disposable.clear()
+    }
 }
