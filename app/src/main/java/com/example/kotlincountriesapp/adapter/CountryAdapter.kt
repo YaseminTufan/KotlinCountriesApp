@@ -14,7 +14,7 @@ import com.example.kotlincountriesapp.util.placeHolderProgressBar
 import com.example.kotlincountriesapp.view.FeedFragmentDirections
 import kotlinx.android.synthetic.main.item_country.view.*
 
-class CountryAdapter(val countryList : ArrayList<Country>):RecyclerView.Adapter<CountryAdapter.CountryViewHolder>() {
+class CountryAdapter(val countryList : ArrayList<Country>):RecyclerView.Adapter<CountryAdapter.CountryViewHolder>(),CountryClickListener {
     class CountryViewHolder(var view : ItemCountryBinding) : RecyclerView.ViewHolder(view.root){
 
     }
@@ -29,6 +29,7 @@ class CountryAdapter(val countryList : ArrayList<Country>):RecyclerView.Adapter<
     override fun onBindViewHolder(holder: CountryViewHolder, position: Int) {
         // data binding bağladık.
         holder.view.country = countryList[position]
+        holder.view.listener =  this
 
         /*holder.view.name.text = countryList[position].countryName
         holder.view.region.text = countryList[position].countryRegion
@@ -51,6 +52,13 @@ class CountryAdapter(val countryList : ArrayList<Country>):RecyclerView.Adapter<
         countryList.clear()
         countryList.addAll(newCountryList)
         notifyDataSetChanged()
+
+    }
+
+    override fun onCountryClicked(v: View) {
+        val uuid = v.countryUuidText.text.toString().toInt()
+        val action = FeedFragmentDirections.actionFeedFragmentToCountryFragment(uuid)
+        Navigation.findNavController(v).navigate(action)
 
     }
 }
